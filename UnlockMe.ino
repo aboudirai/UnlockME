@@ -43,9 +43,9 @@ void loop()
   int key5 = kpd.getKey() - '0';
   int key6 = kpd.getKey() - '0';
   
-  int num1 = 28;
-  int num2 = 2;
-  int num3 = 32;
+  int num1 = key1 * 10 + key2;
+  int num2 = key3 * 10 + key4;
+  int num3 = key5 * 10 + key6;
 
   
 
