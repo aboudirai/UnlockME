@@ -1,3 +1,4 @@
+
 #include <Keypad.h>
 
 const byte ROWS = 4; // Four rows
@@ -10,9 +11,9 @@ char keys[ROWS][COLS] = {
   {'#','0','*'}
 };
 // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
-byte rowPins[ROWS] = { 9, 8, 7, 6 };
+byte rowPins[ROWS] = { 9, 10, 11, 12 };
 // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
-byte colPins[COLS] = { 12, 11, 10 }; 
+byte colPins[COLS] = { 6, 8, 7}; 
 
 // Create the Keypad
 Keypad kpd = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
@@ -21,36 +22,42 @@ Keypad kpd = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 #define step_pin 3
 #define dir_pin 2
 
-
+int fullRotSteps = 1600;
+int currSteps = 0;
+int delayStep = 150;
+int comboNums = 40;
+  
 void setup()
 {
-  int fullRotSteps = 1600;
-  int currSteps = 0;
-  int delayStep = 150;
-  int comboNums = 40;
   
   pinMode(dir_pin, OUTPUT);
   pinMode(step_pin, OUTPUT);
   pinMode(ledpin,OUTPUT);
   digitalWrite(ledpin, HIGH);
+  Serial.begin(9600);
+  
 }
 void loop() 
 {
-  int key1 = kpd.getKey() - '0';
-  int key2 = kpd.getKey() - '0';
-  int key3 = kpd.getKey() - '0';
-  int key4 = kpd.getKey() - '0';
-  int key5 = kpd.getKey() - '0';
-  int key6 = kpd.getKey() - '0';
+  
+  int key1 = kpd.waitForKey() - '0';
+  int key2 = kpd.waitForKey() - '0';
+  int key3 = kpd.waitForKey() - '0';
+  int key4 = kpd.waitForKey() - '0';
+  int key5 = kpd.waitForKey() - '0';
+  int key6 = kpd.waitForKey() - '0';
   
   int num1 = key1 * 10 + key2;
   int num2 = key3 * 10 + key4;
   int num3 = key5 * 10 + key6;
-
-  
-
+  Serial.println(num1);
+  Serial.println(num2);
+  Serial.println(num3);
+  //int num2 = 5;
+  //int num3 = 5;
   int stepsPerNum = fullRotSteps / comboNums;
   
+  digitalWrite(dir_pin,HIGH);
   currSteps =  fullRotSteps + (stepsPerNum * (comboNums - num1));
   while(currSteps > 0){
     digitalWrite(step_pin, LOW);
